@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FILL Extension Web Demo — Scholarship & Fellowship Portals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --slate-900: #0f172a;
+      --slate-800: #1e293b;
+      --slate-700: #334155;
+      --slate-600: #475569;
+      --slate-500: #64748b;
+      --slate-200: #e2e8f0;
+      --slate-100: #f1f5f9;
+      --slate-50: #f8fafc;
+      --indigo-600: #4f46e5;
+      --indigo-700: #4338ca;
+      --emerald-600: #059669;
+      --emerald-50: #ecfdf5;
+      --amber-600: #d97706;
+      --amber-50: #fffbeb;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body {
+      background-color: var(--slate-50);
+      color: var(--slate-900);
+      line-height: 1.5;
+      padding-bottom: 80px;
+    }
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--slate-200);
+      padding: 16px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+    .header-inner {
+      max-width: 1040px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand-title {
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #e0e7ff;
+      color: var(--indigo-700);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .container {
+      max-width: 1040px;
+      margin: 28px auto;
+      padding: 0 20px;
+    }
+    .instruction-card {
+      background: #ffffff;
+      border: 1px solid var(--slate-200);
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .instruction-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--slate-900);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .instruction-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .step-box {
+      background: var(--slate-50);
+      border: 1px solid var(--slate-200);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 0.8rem;
+      color: var(--slate-600);
+    }
+    .step-box strong {
+      display: block;
+      color: var(--slate-900);
+      margin-bottom: 4px;
+    }
+    .tabs-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--slate-200);
+      padding-bottom: 12px;
+    }
+    .tab-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--slate-600);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tab-btn:hover {
+      background: #ffffff;
+      color: var(--slate-900);
+    }
+    .tab-btn.active {
+      background: var(--slate-900);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+    }
+    .form-wrapper {
+      background: #ffffff;
+      border: 1px solid var(--slate-200);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04);
+    }
+    .form-header {
+      border-bottom: 1px solid var(--slate-200);
+      padding-bottom: 20px;
+      margin-bottom: 24px;
+    }
+    .form-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--slate-900);
+    }
+    .form-subtitle {
+      font-size: 0.85rem;
+      color: var(--slate-500);
+      margin-top: 4px;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+    label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--slate-800);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .field-hint {
+      font-size: 0.72rem;
+      color: var(--slate-500);
+      font-weight: 500;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--slate-200);
+      border-radius: 12px;
+      font-size: 0.88rem;
+      color: var(--slate-900);
+      background: #ffffff;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--indigo-600);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+    }
+    .input-filled-flash {
+      animation: fillFlash 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes fillFlash {
+      0% {
+        background-color: #ecfdf5;
+        border-color: #10b981;
+      }
+      100% {
+        background-color: #ffffff;
+        border-color: var(--slate-200);
+      }
+    }
+    .form-footer {
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid var(--slate-200);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: gap;
+      gap: 12px;
+    }
+    .btn-secondary {
+      background: #ffffff;
+      border: 1px solid var(--slate-200);
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: var(--slate-700);
+      cursor: pointer;
+    }
+    .btn-secondary:hover {
+      background: var(--slate-100);
+    }
+    .btn-submit-disabled {
+      background: var(--slate-200);
+      color: var(--slate-500);
+      border: none;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: not-allowed;
+    }
+    .simulation-box {
+      margin-top: 24px;
+      background: #f8fafc;
+      border: 1px dashed var(--slate-300);
+      border-radius: 16px;
+      padding: 16px 20px;
+      font-size: 0.8rem;
+      color: var(--slate-600);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .simulation-box button {
+      background: var(--indigo-600);
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.78rem;
+    }
+    .hidden {
+      display: none !important;
+    }
+    .notice-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="brand-title">
+        <span>FILL</span>
+        <span class="badge">Companion Test Portal</span>
+      </div>
+      <div>
+        <a href="/" style="font-size: 0.82rem; font-weight: 700; color: var(--indigo-600); text-decoration: none;">
+          &larr; Return to FILL Web App
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Instruction Card -->
+    <div class="instruction-card">
+      <div class="instruction-title">
+        <span>⚡ Extension 2-Minute Demonstration</span>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--slate-600);">
+        This page contains two real-world scholarship forms with deliberately differing semantic wording. Test the FILL Chrome Extension on both to see field detection, confidence scores, and FILL Memory in action.
+      </p>
+
+      <div class="instruction-steps">
+        <div class="step-box">
+          <strong>1. Test Form A (Standard Wording)</strong>
+          Uses labels like <em>"Current educational institution"</em> and <em>"Course of Study"</em>.
+        </div>
+        <div class="step-box">
+          <strong>2. Click Extension & "Scan Page"</strong>
+          FILL detects fields, calculates confidence, and suggests matching Vault data.
+        </div>
+        <div class="step-box">
+          <strong>3. Fill & Remember</strong>
+          Click <em>"Fill with FILL"</em>. The inputs populate cleanly with input events.
+        </div>
+        <div class="step-box">
+          <strong>4. Test Form B (Differing Wording)</strong>
+          Uses <em>"Institution presently attended"</em> & <em>"Academic programme"</em>. FILL Memory recalls the semantic link!
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="tabs-bar">
+      <button class="tab-btn active" id="tab-form-a" onclick="switchForm('form-a')">
+        <span>Form A: Global Merit Grant</span>
+        <span style="font-size: 0.7rem; opacity: 0.8;">(Standard Phrasing)</span>
+      </button>
+      <button class="tab-btn" id="tab-form-b" onclick="switchForm('form-b')">
+        <span>Form B: Commonwealth Fellowship</span>
+        <span style="font-size: 0.7rem; opacity: 0.8;">(Alternative Phrasing)</span>
+      </button>
+    </div>
+
+    <!-- FORM A -->
+    <div id="container-form-a" class="form-wrapper">
+      <div class="form-header">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <h2 class="form-title">Global Merit Undergraduate Scholarship Application</h2>
+          <span class="notice-chip" style="background: #eef2ff; color: #4338ca;">Academic Year 2026/2027</span>
+        </div>
+        <p class="form-subtitle">Form A • Phrasing uses: "Current educational institution", "Course of Study"</p>
+      </div>
+
+      <form id="scholarship-form-a" onsubmit="event.preventDefault();">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="fa-full-name">
+              <span>Full Name</span>
+              <span class="field-hint">Legal given and surname</span>
+            </label>
+            <input type="text" id="fa-full-name" name="fullName" placeholder="e.g. Maya Christine Lin" autocomplete="name" />
+          </div>
+
+          <div class="form-group">
+            <label for="fa-email">
+              <span>Email</span>
+              <span class="field-hint">Primary correspondence address</span>
+            </label>
+            <input type="email" id="fa-email" name="emailAddress" placeholder="e.g. maya.lin@domain.edu" autocomplete="email" />
+          </div>
+
+          <div class="form-group">
+            <label for="fa-phone">
+              <span>Phone Number</span>
+              <span class="field-hint">Mobile with area code</span>
+            </label>
+            <input type="tel" id="fa-phone" name="phoneNumber" placeholder="e.g. +1 (555) 234-5678" autocomplete="tel" />
+          </div>
+
+          <div class="form-group">
+            <label for="fa-school">
+              <span>Current educational institution</span>
+              <span class="field-hint">School / College currently attending</span>
+            </label>
+            <input type="text" id="fa-school" name="currentEducationalInstitution" placeholder="e.g. Saint Patrick's College" />
+          </div>
+
+          <div class="form-group">
+            <label for="fa-course">
+              <span>Course of Study</span>
+              <span class="field-hint">Declared degree concentration</span>
+            </label>
+            <input type="text" id="fa-course" name="courseOfStudy" placeholder="e.g. Computer Science" />
+          </div>
+
+          <div class="form-group">
+            <label for="fa-grad">
+              <span>Expected Graduation Year</span>
+              <span class="field-hint">Completion cohort</span>
+            </label>
+            <input type="text" id="fa-grad" name="expectedGraduationYear" placeholder="e.g. 2027" />
+          </div>
+
+          <div class="form-group">
+            <label for="fa-city">
+              <span>City of Residence</span>
+              <span class="field-hint">Residential municipality</span>
+            </label>
+            <input type="text" id="fa-city" name="cityOfResidence" placeholder="e.g. Riverside" />
+          </div>
+        </div>
+
+        <div class="form-footer">
+          <button type="button" class="btn-secondary" onclick="clearFormInputs('scholarship-form-a')">
+            Reset Fields
+          </button>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 0.75rem; color: var(--slate-500);">Safety Guard: FILL does NOT auto-submit</span>
+            <button type="button" class="btn-submit-disabled" title="Demo form submit is intentionally disabled for safety demonstration">
+              Submit Form (Disabled)
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- FORM B -->
+    <div id="container-form-b" class="form-wrapper hidden">
+      <div class="form-header">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <h2 class="form-title">Commonwealth Academic Fellowship Registry</h2>
+          <span class="notice-chip" style="background: #f0fdf4; color: #15803d;">Cohort Intake B</span>
+        </div>
+        <p class="form-subtitle">Form B • Phrasing uses: "Institution presently attended", "Academic programme", "Contact number"</p>
+      </div>
+
+      <form id="scholarship-form-b" onsubmit="event.preventDefault();">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="fb-full-name">
+              <span>Candidate Legal Name</span>
+              <span class="field-hint">Passport or national registry</span>
+            </label>
+            <input type="text" id="fb-full-name" name="candidateLegalName" placeholder="Given name(s) and family name" />
+          </div>
+
+          <div class="form-group">
+            <label for="fb-email">
+              <span>Electronic Mail Address</span>
+              <span class="field-hint">Official applicant inbox</span>
+            </label>
+            <input type="email" id="fb-email" name="electronicMailAddress" placeholder="academic@inbox.org" />
+          </div>
+
+          <div class="form-group">
+            <label for="fb-phone">
+              <span>Contact number</span>
+              <span class="field-hint">Telephone or mobile line</span>
+            </label>
+            <input type="tel" id="fb-phone" name="contactNumber" placeholder="+1..." />
+          </div>
+
+          <div class="form-group">
+            <label for="fb-school">
+              <span>Institution presently attended</span>
+              <span class="field-hint">Collegiate establishment</span>
+            </label>
+            <input type="text" id="fb-school" name="institutionPresentlyAttended" placeholder="Collegiate body" />
+          </div>
+
+          <div class="form-group">
+            <label for="fb-course">
+              <span>Academic programme</span>
+              <span class="field-hint">Subject area or discipline</span>
+            </label>
+            <input type="text" id="fb-course" name="academicProgramme" placeholder="Discipline" />
+          </div>
+
+          <div class="form-group">
+            <label for="fb-country">
+              <span>Country of Residence</span>
+              <span class="field-hint">National jurisdiction</span>
+            </label>
+            <input type="text" id="fb-country" name="countryOfResidence" placeholder="e.g. United States" />
+          </div>
+        </div>
+
+        <div class="form-footer">
+          <button type="button" class="btn-secondary" onclick="clearFormInputs('scholarship-form-b')">
+            Reset Fields
+          </button>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 0.75rem; color: var(--slate-500);">Safety Guard: FILL does NOT auto-submit</span>
+            <button type="button" class="btn-submit-disabled" title="Demo form submit is intentionally disabled for safety demonstration">
+              Submit Form (Disabled)
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Simulator Box for In-Browser Testing (When extension is being loaded) -->
+    <div class="simulation-box">
+      <div>
+        <strong style="color: var(--slate-900);">In-Browser Companion Simulator</strong>
+        <p style="margin-top: 2px;">
+          Want to test the autofill logic directly inside this page without installing the extension bundle? Click simulate to trigger the FILL Sense content injector.
+        </p>
+      </div>
+      <button onclick="runInPageSimulator()">Simulate In-Page Autofill</button>
+    </div>
+
+  </div>
+
+  <script>
+    function switchForm(formId) {
+      const tabA = document.getElementById('tab-form-a');
+      const tabB = document.getElementById('tab-form-b');
+      const containerA = document.getElementById('container-form-a');
+      const containerB = document.getElementById('container-form-b');
+
+      if (formId === 'form-a') {
+        tabA.classList.add('active');
+        tabB.classList.remove('active');
+        containerA.classList.remove('hidden');
+        containerB.classList.add('hidden');
+      } else {
+        tabB.classList.add('active');
+        tabA.classList.remove('active');
+        containerB.classList.remove('hidden');
+        containerA.classList.add('hidden');
+      }
+    }
+
+    function clearFormInputs(formId) {
+      const form = document.getElementById(formId);
+      if (form) {
+        form.reset();
+        const inputs = form.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+          input.value = '';
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+        });
+      }
+    }
+
+    // Direct in-page simulation for quick testing
+    function runInPageSimulator() {
+      // Check which form is active
+      const activeContainer = document.querySelector('.form-wrapper:not(.hidden)');
+      if (!activeContainer) return;
+
+      const sampleVault = {
+        fullName: "Alex Rivera",
+        email: "alex@example.com",
+        phone: "+1 555 010 1234",
+        school: "Riverside Secondary School",
+        course: "Computer Science",
+        gradYear: "2027",
+        city: "Riverside",
+        country: "United States"
+      };
+
+      const inputs = activeContainer.querySelectorAll('input');
+      let filled = 0;
+
+      inputs.forEach(input => {
+        const id = (input.id || '').toLowerCase();
+        const name = (input.name || '').toLowerCase();
+        const labelText = input.closest('.form-group')?.querySelector('label')?.innerText.toLowerCase() || '';
+
+        let val = '';
+        if (id.includes('name') || name.includes('name') || labelText.includes('name')) {
+          val = sampleVault.fullName;
+        } else if (id.includes('email') || name.includes('email') || labelText.includes('mail')) {
+          val = sampleVault.email;
+        } else if (id.includes('phone') || name.includes('phone') || labelText.includes('number') || labelText.includes('contact')) {
+          val = sampleVault.phone;
+        } else if (id.includes('school') || name.includes('institution') || labelText.includes('institution') || labelText.includes('school')) {
+          val = sampleVault.school;
+        } else if (id.includes('course') || name.includes('programme') || labelText.includes('programme') || labelText.includes('study')) {
+          val = sampleVault.course;
+        } else if (id.includes('grad') || name.includes('grad') || labelText.includes('graduation')) {
+          val = sampleVault.gradYear;
+        } else if (id.includes('city') || name.includes('city') || labelText.includes('city')) {
+          val = sampleVault.city;
+        } else if (id.includes('country') || name.includes('country') || labelText.includes('country')) {
+          val = sampleVault.country;
+        }
+
+        if (val) {
+          input.value = val;
+          input.classList.add('input-filled-flash');
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+          filled++;
+          setTimeout(() => input.classList.remove('input-filled-flash'), 1200);
+        }
+      });
+
+      alert(`FILL Simulation: Successfully detected and filled ${filled} fields based on semantic matching!`);
+    }
+  </script>
+</body>
+</html>

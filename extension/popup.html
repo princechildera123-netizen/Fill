@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FILL Extension Popup</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <!-- App Header -->
+  <header class="popup-header">
+    <div class="brand">
+      <div class="brand-logo">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="brand-title">FILL</h1>
+        <p class="brand-subtitle">Your information. One time.</p>
+      </div>
+    </div>
+    <div id="vault-status-indicator" class="status-indicator" title="Connected to Local Vault">
+      <span class="status-dot"></span>
+      <span class="status-text">Vault Active</span>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="popup-main">
+    <!-- State 1: Ready to Scan -->
+    <section id="state-ready" class="state-section">
+      <div class="hero-card">
+        <div class="hero-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+        </div>
+        <h2 class="hero-title">Ready to fill this form?</h2>
+        <p class="hero-desc">
+          FILL inspects form questions and understands their meaning to match with your private Vault.
+        </p>
+        <button id="btn-scan-page" class="btn btn-primary btn-block">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <span>Scan Page</span>
+        </button>
+      </div>
+
+      <div class="safety-banner">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <span>Safety Guard: No auto-submit. You review every match.</span>
+      </div>
+    </section>
+
+    <!-- State 2: Scanning / Loading -->
+    <section id="state-scanning" class="state-section hidden">
+      <div class="loading-box">
+        <div class="spinner"></div>
+        <p class="loading-title">Scanning form structure...</p>
+        <p class="loading-subtitle">Applying semantic understanding & FILL Memory</p>
+      </div>
+    </section>
+
+    <!-- State 3: Results & Review -->
+    <section id="state-results" class="state-section hidden">
+      <div class="results-header">
+        <div>
+          <span id="fields-count-badge" class="count-badge">0 fields found</span>
+          <span id="memory-count-badge" class="memory-badge hidden">🧠 Memory applied</span>
+        </div>
+        <button id="btn-rescan" class="btn-text">Rescan</button>
+      </div>
+
+      <!-- Field List Container -->
+      <div id="fields-list" class="fields-list">
+        <!-- Rendered dynamically by popup.js -->
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-footer">
+        <button id="btn-fill-now" class="btn btn-primary btn-block">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          <span>Fill with FILL</span>
+        </button>
+        <button id="btn-review-toggle" class="btn btn-secondary btn-block">
+          Review Matches (<span id="unreviewed-count">0</span> unapproved)
+        </button>
+      </div>
+    </section>
+
+    <!-- State 4: Fill Success Summary -->
+    <section id="state-success" class="state-section hidden">
+      <div class="success-card">
+        <div class="success-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+        </div>
+        <h2 class="hero-title">Fields Populated!</h2>
+        <p id="success-summary-text" class="hero-desc">
+          Successfully populated 5 fields on this form.
+        </p>
+
+        <div id="memory-learned-alert" class="memory-learned-card hidden">
+          <div class="memory-learned-header">
+            <span>🧠 FILL Memory Updated</span>
+          </div>
+          <p id="memory-learned-text" class="memory-learned-desc">
+            Learned: "Institution presently attended" → School
+          </p>
+        </div>
+
+        <button id="btn-done" class="btn btn-secondary btn-block">
+          Done
+        </button>
+      </div>
+    </section>
+
+    <!-- State 5: Error or No Fields Found -->
+    <section id="state-empty" class="state-section hidden">
+      <div class="empty-card">
+        <div class="empty-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </div>
+        <h2 id="empty-title" class="hero-title">No supported fields found</h2>
+        <p id="empty-desc" class="hero-desc">
+          Navigate to a webpage containing form inputs (e.g. scholarship or application portal) and click scan again.
+        </p>
+        <button id="btn-empty-retry" class="btn btn-secondary btn-block">
+          Try Again
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Remap Modal (Review & Choose another Vault Field) -->
+  <div id="remap-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Select Vault Field</h3>
+        <button id="btn-close-modal" class="btn-icon">&times;</button>
+      </div>
+      <p id="modal-field-label" class="modal-subtitle">Remapping "Institution presently attended"</p>
+
+      <div class="modal-body">
+        <label class="input-label" for="select-vault-field">Choose corresponding Vault item:</label>
+        <select id="select-vault-field" class="form-select">
+          <option value="identity.fullName">Full Name</option>
+          <option value="identity.firstName">First Name</option>
+          <option value="identity.lastName">Last Name</option>
+          <option value="contact.email">Email Address</option>
+          <option value="contact.phone">Phone Number</option>
+          <option value="education.school" selected>School / Educational Institution</option>
+          <option value="education.course">Course of Study / Programme</option>
+          <option value="education.gradYear">Graduation Year</option>
+          <option value="address.city">City</option>
+          <option value="address.country">Country</option>
+          <option value="identity.dob">Date of Birth</option>
+        </select>
+
+        <div class="checkbox-group">
+          <input type="checkbox" id="check-remember-mapping" checked>
+          <label for="check-remember-mapping">
+            <strong>Remember with FILL Memory</strong>
+            <span>Automatically suggest this mapping for future forms with similar wording</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="btn-cancel-remap" class="btn btn-secondary">Cancel</button>
+        <button id="btn-save-remap" class="btn btn-primary">Confirm Mapping</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "name": "FILL",
+  "description": "Your information. One time. Privacy-first intelligent form completion application that learns semantic field relationships.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
